@@ -18,7 +18,7 @@
         </el-form-item>
         <el-form-item>
           <el-button
-              style="width: 100%;margin-top: 20px;background-color: #42b983;color: white;font-weight: bolder;border: 0px"
+              style="width: 100%;margin-top: 20px;background-color: rgba(246, 146, 70, 0.96);color: white;font-weight: bolder;border: 0px"
               @click="login">
             登陆
           </el-button>
@@ -26,7 +26,7 @@
                      @click="faceLogin">
             人脸登录
           </el-button>
-          <el-button style="width: 100%;margin-top: 20px;background-color: #b0b0b0;color: white;font-weight: bolder;border: 0px;margin-left: 0"
+          <el-button style="width: 100%;margin-top: 20px;background-color: rgba(246, 146, 70, 0.96);color: white;font-weight: bolder;border: 0px;margin-left: 0"
                      @click="register">
             注册
           </el-button>
@@ -40,10 +40,10 @@
             class="image" style="width: 300px"
         />
         <div style="padding: 14px">
-          <span>Born to succeed</span>
+          <span style="font-size: 16px;font-weight: 600;color: #a6a6a6">欢迎用户登录</span>
           <div class="bottom">
             <time class="time">{{ gettime }}</time>
-            <el-button text class="button" @click="home">Back Home</el-button>
+<!--            <el-button text class="button" @click="home"></el-button>-->
           </div>
         </div>
       </el-card>
@@ -53,10 +53,9 @@
 
 <script>
 
-// import request from "@/utils/request";
 import { mapMutations } from 'vuex';
 
-import request, {postRequest} from "@/utils/request";
+import {postRequest} from "@/utils/request";
 
 export default {
   name: "Login",
@@ -98,6 +97,8 @@ export default {
     let mf = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes();
     let ss = new Date().getSeconds() < 10 ? '0' + new Date().getSeconds() : new Date().getSeconds();
     this.gettime = yy + '-' + mm + '-' + dd + ' ' + hh + ':' + mf + ':' + ss;
+    sessionStorage.removeItem("User")
+    localStorage.removeItem("Authorization")
   },
   methods: {
     ...mapMutations(['changeLogin']),
@@ -127,14 +128,10 @@ export default {
       })
     },
     register(){
-      this.$router.push("/register")
+      this.$router.push("/Register")
     },
     faceLogin(){
-      this.$router.push("/faceLogin")
-    },
-    mounted(){
-      sessionStorage.removeItem("User")
-      localStorage.removeItem("Authorization")
+      this.$router.push("/FaceLogin")
     }
   }
 }

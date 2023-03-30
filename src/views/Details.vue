@@ -2,42 +2,40 @@
   <div>
     <HomeHeader/>
   </div>
-  <div class="paper">
-<!--    <div class="img" style="justify-content: center;display: flex;flex-direction: row ">-->
-<!--      <img :src="this.blogData.picture" alt="" style="width:60%;display: block;border: 2px solid #ffffff;border-radius: 15px;-->
-<!--">-->
-<!--    </div>-->
-    <div class="header">
-      <div class="title">
-        {{ this.blogData.title }}
-      </div>
-      <div class="information">
-        <div class="author">
-          作者：{{ this.blogData.author }}
+  <div class="bg">
+    <div class="paper" >
+      <div class="header">
+        <div class="title">
+          公告标题：{{ this.Data.title }}
         </div>
-        <div class="time">
-          时间：{{ this.blogData.time }}
-        </div>
-        <div class="istransmit">
-          是否转载：
-          <span v-if="this.blogData.istransmit == '1'">是</span>
-          <sapn v-else>否</sapn>
+        <div class="information">
+          <div class="author">
+            发布者：{{ this.Data.publisher }}
+          </div>
+          <div class="time">
+            时间：{{ this.Data.publishTime }}
+          </div>
         </div>
       </div>
-    </div>
-    <el-divider>
-    </el-divider>
-    <div class="container">
-      {{ this.blogData.content }}
-    </div>
-    <el-divider content-position="right">End-divider</el-divider>
-    <div class="copyright">
-      凡本网注明“转载:XXX”的作品，均转载自其它媒体，转载目的在于传递更多信息，并不代表本网赞同其观点和对其真实性负责。
+      <el-divider>
+      </el-divider>
+      <div class="container">
+        {{ this.Data.content }}
+      </div>
+      <el-divider content-position="right" border-style="color: #a6a6a6;
+"></el-divider>
+      <div class="copyright">
+        凡本系统“发布自:XXX”的作品，均转载自其它部门，转载目的在于给使用人员传递更多信息。
+      </div>
     </div>
   </div>
+
 </template>
 
 <script>
+import HomeHeader from "@/components/HomeHeader";
+import {getRequest} from "@/utils/request";
+
 export default {
   name: "Details",
   components:{
@@ -45,29 +43,23 @@ export default {
   },
   data(){
     return{
-      blogData:{},
-      blogId:'',
+      Data:{},
+      Id:'',
       text:'',
     }
   },
-  created() {
-    this.getBlogId()
-
-  },
   mounted() {
-    this.getBlog(this.blogId)
-
+    this.getId()
+    this.getData()
   },
   methods:{
-    getBlogId(){
-      this.blogId = this.$route.query.id;
-      console.log(this.blogId)
+    getId(){
+      this.Id = this.$route.query.id;
+      console.log(this.Id)
     },
-    getBlog(id){
-      request.get(''+id
-      ).then(res => {
-        this.blogData = res.data
-        console.log(this.blogData)
+    getData(){
+      getRequest('/dor/announce/'+this.Id).then(res => {
+        this.Data = res.data
       })
     },
   }
@@ -75,5 +67,78 @@ export default {
 </script>
 
 <style scoped>
+.paper {
+  border-radius: 0.5em;
+  border: 1px solid #c5c5c5;
+  background-color: #fcfffc;
+  box-shadow: #999999;
+  margin: 20px 100px;
+  padding: 20px 40px;
+  line-height: 25px;
+}
 
+
+.title {
+  margin-top: 10px;
+  font-size: 40px;
+  font-weight: 800;
+  text-align: center;
+  color: #a6a6a6;
+}
+
+.information {
+  padding-left: 90px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  color: #a6a6a6;
+}
+
+.author {
+  display: block;
+  font-size: 20px;
+  margin-right: 200px;
+  font-weight: 600;
+  color: #a6a6a6;
+}
+
+.time {
+  color: #a6a6a6;
+  display: block;
+  font-size: 20px;
+  margin-right: 200px;
+  font-weight: 600;
+}
+
+
+.container{
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+  width: 100%;
+  font-size: 17px;
+  color: #a6a6a6;
+}
+.copyright{
+  padding-top: 20px;
+  text-align: center;
+  color: #8c939d;
+  height: 80px;
+}
+
+li{
+  font-weight: 500;
+  color: white;
+  font-size: 25px;
+}
+.bg{
+  text-align: center;
+  font-size: 20px;
+  text-shadow: #999999;
+  color: #000000;
+  width: 100%;
+  height: 100vh;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(rgba(72, 217, 130, 0.2)));
+}
 </style>

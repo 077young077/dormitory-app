@@ -9,7 +9,7 @@ import locale from 'element-plus/lib/locale/lang/zh-cn'
 import * as echarts from 'echarts'
 import axios from "axios"
 import store from "./store/store"
-import request from "@/utils/request";
+
 axios.defaults.baseURL = "http://lizp.vip:8183";
 
 createApp(App).use(router).use(store).use(ElementPlus,{ locale}).mount('#app')

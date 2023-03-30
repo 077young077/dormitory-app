@@ -6,7 +6,7 @@ const routes = [
     path: '/',
     name: 'Layout',
     component: Layout,
-    redirect:"/AnnouncementManagement",
+    redirect:"/login",
     children:[
       {
         path:'UserManagement',
@@ -46,14 +46,27 @@ const routes = [
     component: () => import('@/views/Login')
   },
   {
+    path: '/HandleProposal',
+    name: '/HandleProposal',
+    component: () => import('@/views/HandleProposal')
+  },
+  {
     path: '/Register',
     name: '/Register',
-    component: () => import('@/views/Register')
+    component: () => import('@/views/Register'),
+    meta: { isAuth: true, title:'注册' },
   },
   {
     path: '/FaceLogin',
     name: '/FaceLogin',
-    component: () => import('@/views/FaceLogin')
+    component: () => import('@/views/FaceLogin'),
+    meta: { isAuth: true, title:'人脸登录' },
+  },
+  {
+    path: '/InfoFulfill',
+    name: '/InfoFulfill',
+    component: () => import('@/views/InfoFulfill'),
+    meta: { isAuth: true, title:'完善信息' },
   },
   {
     path: '/Announcement',
@@ -64,6 +77,11 @@ const routes = [
     path: '/Details',
     name: '/Details',
     component: () => import('@/views/Details')
+  },
+  {
+    path: '/FeeAddress',
+    name: '/FeeAddress',
+    component: () => import('@/views/FeeAddress')
   }
 ]
 
@@ -73,9 +91,9 @@ const router = createRouter({
 })
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
 router.beforeEach((to, from, next) => {
-  if (to.path === '/login') {
+  if (to.path === '/login' || to.meta.isAuth) {
     next();
-  } else {
+  }else {
     let token = localStorage.getItem('Authorization');
     if (token === null || token === '') {
       next('/login');

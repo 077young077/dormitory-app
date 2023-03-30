@@ -21,8 +21,14 @@
           <div class="condition" style="width: 150px">
             当前状况：<span v-if="this.Thisuser">游客</span><span v-else>{{this.userInformation.name}} </span>
           </div>
+          <div v-if="this.flag">
+            <el-icon><UserFilled /></el-icon>已登录
+          </div>
+          <nav v-else>
+            <router-link active-class="active" to="/login" ><div style="line-height: 20px;font-size: 18px;width: 60px;margin-left: 20px"><el-icon><UserFilled /></el-icon>登录</div></router-link>
+          </nav>
           <nav>
-            <router-link active-class="active" to="/login" ><div style="line-height: 20px;font-size: 18px;width: 60px"><el-icon><UserFilled /></el-icon>登录</div></router-link>
+            <router-link active-class="active" to="/login" @click="clearStorage()"><div style="line-height: 20px;font-size: 18px;width: 120px;margin-left: 0"><el-icon><SwitchButton /></el-icon>退出登录</div></router-link>
           </nav>
 <!--          <div class="condition" style="width: 150px">-->
 <!--            <el-dropdown trigger="click">-->
@@ -55,7 +61,8 @@
     UploadFilled,
     ChatLineSquare,
     InfoFilled,
-    ArrowDown
+    ArrowDown,
+    SwitchButton
   } from '@element-plus/icons-vue'
   import {getRequest} from "@/utils/request";
   export default {
@@ -69,12 +76,14 @@
       UploadFilled,
       ChatLineSquare,
       InfoFilled,
-      ArrowDown
+      ArrowDown,
+      SwitchButton
     },
     data(){
       return{
         input:'',
         userInformation:{},
+        flag: false,
       }
     },
     mounted() {
@@ -86,6 +95,7 @@
             '/dor/user/info').then(res => {
           if (res.success) {
             this.userInformation = res.data
+            this.flag = true
           } else {
             this.$message({
               type: "error",
@@ -94,8 +104,11 @@
           }
         })
       },
+      clearStorage(){
+        sessionStorage.removeItem('User')
+        localStorage.removeItem("Authorization")
+      }
     }
-  
   }
   </script>
   
