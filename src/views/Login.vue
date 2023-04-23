@@ -1,10 +1,12 @@
 <template>
   <div id="a" style="width: 100%;height: 100vh;overflow: hidden;display: flex;flex-direction: row;align-content: center">
     <div style="width: 400px;margin-bottom: 150px;margin-top: 150px;margin-left: 25vw;display: block;">
-      <div style="display: flex;flex-direction: row;margin-left: 110px">
+      <div style="display: flex;flex-direction: row;margin-left: 110px;">
+<!--        background-color:#fff;margin-right: 100px;border-radius: 1em-->
         <div style="width: 50px;height: 50px;display: block"><img src="../assets/icon/logo.png" alt="" style="width: 50px;height: 50px"></div>
-        <div style="color:#44cf7c;font-size: 30px;text-align: center;margin-bottom: 10px;font-weight: 600;display: block">欢迎登陆</div>
+        <div style="color:rgba(246, 146, 70, 0.96);font-size: 30px;text-align: center;margin-bottom: 10px;font-weight: 600;display: block;text-shadow: 2px 2px 4px #000000;">智慧楼栋</div>
       </div>
+
       <el-form :model="form" ref="form" size="large" :rules="rules">
         <el-form-item prop="username" style="margin-top: 20px">
           <el-input v-model="form.username">
@@ -36,7 +38,7 @@
     <div style="display: block;margin-bottom: 150px;margin-top: 150px;margin-left: 100px;">
       <el-card :body-style="{ padding: '0px' }">
         <img
-            :src="this.picture"
+            src="../assets/img/banner.jpeg"
             class="image" style="width: 300px"
         />
         <div style="padding: 14px">
@@ -45,6 +47,9 @@
             <time class="time">{{ gettime }}</time>
 <!--            <el-button text class="button" @click="home"></el-button>-->
           </div>
+        </div>
+        <div style="float: right;color: #a6a6a6" @click="gotoAdminLogin">
+          <el-icon><Avatar /></el-icon>
         </div>
       </el-card>
     </div>
@@ -57,9 +62,12 @@ import { mapMutations } from 'vuex';
 
 import {postRequest} from "@/utils/request";
 
+import {Avatar} from '@element-plus/icons-vue'
 export default {
   name: "Login",
-  components: {},
+  components: {
+    Avatar
+  },
   data() {
     return {
       gettime: "",
@@ -87,7 +95,7 @@ export default {
     }
   },
   created() {
-    this.picture='https://source.unsplash.com/random';
+    // this.picture='https://source.unsplash.com/random';
   },
   mounted: function () {
     let yy = new Date().getFullYear();
@@ -102,6 +110,9 @@ export default {
   },
   methods: {
     ...mapMutations(['changeLogin']),
+    gotoAdminLogin(){
+      this.$router.push("/ManagerLogin")
+    },
     home(){
       this.$router.push("/home")
     },
@@ -173,7 +184,7 @@ body{
   bottom: 0px;
   /*margin: auto;*/
   background-color: rgb(255, 208, 0);
-  background-image: url("../assets/img/loginbg.webp");
+  background-image: url("../assets/img/bg.jpg");
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-image-width: 100%;

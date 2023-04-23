@@ -19,15 +19,19 @@
       <el-icon><CreditCard /></el-icon>
       <span>费用管理</span>
     </el-menu-item>
-    <el-menu-item index="ChartManagement" >
+    <el-menu-item index="DormitoryManagement" >
       <el-icon><PieChart /></el-icon>
-      <span>数据管理</span>
+      <span>寝室管理</span>
     </el-menu-item>
     <el-menu-item index="MessageManagement" >
       <el-icon><ChatLineSquare /></el-icon>
+      <span>意见管理</span>
+    </el-menu-item>
+    <el-menu-item index="WorkManagement" >
+      <el-icon><Message /></el-icon>
       <span>报修管理</span>
     </el-menu-item>
-    <el-menu-item index="Home">
+    <el-menu-item index="Login">
       <el-icon><House /></el-icon>
       <span>回到首页</span>
     </el-menu-item>
@@ -48,11 +52,13 @@ import {
   ChatLineSquare,
   Plus,
   Minus,
-  CreditCard
+  CreditCard,
+  Message
 } from '@element-plus/icons-vue'
 export default {
   name: "Aside",
   components:{
+    Message,
     User,
     EditPen,
     Document,

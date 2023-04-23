@@ -1,39 +1,34 @@
 <template>
+
   <div style="padding: 10px">
   <!--    表格展示-->
+    <span class="title" style="margin: 10px 800px 10px 0">
+      意见数据展示
+    </span>
+    <span>
+      <el-button type="primary" @click="searchByStatus" style="background-color: #42b983;border: 0;height: 30px;margin-bottom: 10px">筛选未读意见</el-button>
+      <el-button type="primary" @click="getSuggestions" style="background-color: #42b983;border: 0;height: 30px;margin-bottom: 10px">刷新</el-button>
+    </span>
   <div>
-    <div style="display: flex;flex-direction: row;">
-      <!--    功能区-->
-      <div style="margin: 10px 0;width: 50%;text-align:left;display: block">
-        <el-button type="primary" @click="add" style="background-color: #42b983;border: 0">新增</el-button>
-      </div>
-      <!--    搜索区-->
-      <div style="margin: 10px 0;width: 50%;text-align:center;display: block">
-        <el-input v-model="search" style="width: 20%" placeholder="按昵称查询"/>
-        <el-button type="default" style="margin-left: 5px" @click="get">查询</el-button>
-      </div>
-    </div>
 
-    <el-table :data="tableData" border stripe style="width: 1290px;margin: 0">
-      <el-table-column prop="id" label="ID" width="100" sortable/>
-      <el-table-column prop="studentId" label="申请学生" width="150" sortable/>
-      <el-table-column prop="type" label="报修类型" width="170"/>
-      <el-table-column prop="condition" label="现在状态" width="170"/>
-      <el-table-column prop="description" label="描述" width="170"/>
-      <el-table-column prop="time" label="申请时间" width="170"/>
-      <el-table-column prop="address" label="地址" width="170"/>
+
+    <el-table :data="tableDataWithIndex" border stripe style="width: 1290px;margin: 0" :header-cell-style="{'text-align':'center'}"
+              :cell-style="{'text-align':'center'}">
+      <el-table-column prop="index" label="序号" width="80" sortable/>
+      <el-table-column prop="student" label="建议学生" width="150" />
+      <el-table-column prop="content" label="建议内容" width="350"/>
+      <el-table-column prop="commitTime" label="建议时间" width="190"/>
+      <el-table-column prop="checkTime" label="处理时间" width="190"/>
+<el-table-column prop="status" label="状态" width="140" >
+  <template v-slot="{ row }">
+    {{ row.status === 1 ? '已读' : row.status === -1 ? '未读' : '' }}
+  </template>
+    </el-table-column>
       <el-table-column fixed="right"
                        label="操作"
                        width="190">
         <template #default="scope">
-          <el-button @click="handleEdit(scope.row)" >编辑</el-button>
-          <el-popconfirm title="确定删除？" @confirm="handleDelete(scope.row.id)"
-                         style="background-color: darkseagreen;border: 0;">
-            <template #reference>
-              <el-button type="danger" style="background-color: darkseagreen;border: 0;">删除</el-button>
-              <el-alert title="您没有管理员权限" type="success" />
-            </template>
-          </el-popconfirm>
+          <el-button @click="handleEdit(scope.row)" style="background-color: darkseagreen;border: 0;color: #FFFFFF">编辑意见状态</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -52,65 +47,26 @@
       />
       <el-dialog
           v-model="dialogVisible"
-          title="编辑信息"
+          title="编辑意见状态"
           width="30%"
-
       >
         <el-form :model="form" label-width="12px">
           <el-form-item style="flex-direction: row">
             <el-tag
                 style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              用户名：
+              更改状态：
             </el-tag>
-            <el-input v-model="form.username" style="width: 80%;display: block"/>
+            <el-radio-group v-model="form.status">
+            <el-radio :label="1">已读</el-radio>
+            <el-radio :label="-1">未读</el-radio>
+          </el-radio-group>
           </el-form-item>
-          <el-form-item style="flex-direction: row">
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              昵称：
-            </el-tag>
-            <el-input v-model="form.nickname" style="width: 80%;display: block"/>
-          </el-form-item>
-          <el-form-item style="flex-direction: row">
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              年龄：
-            </el-tag>
-            <el-input v-model="form.age" style="width: 80%;display: block"/>
-          </el-form-item>
-          <el-form-item style="flex-direction: row">
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              性别：
-            </el-tag>
 
-            <el-radio label="男" size="large" v-model="form.sex" fill="darkseagreen">男</el-radio>
-            <el-radio label="女" size="large" v-model="form.sex" fill="darkseagreen">女</el-radio>
-            <el-radio label="保密" size="large" v-model="form.sex" fill="darkseagreen">保密</el-radio>
-          </el-form-item>
-          <el-form-item style="flex-direction: row">
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              地址：
-            </el-tag>
-            <el-input v-model="form.address" type="textarea" style="width: 80%;display: block"/>
-          </el-form-item>
-          <el-form-item>
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              头像：
-            </el-tag>
-            <el-upload
-                action="" :on-success="fileUploadSuccess"
-            >
-              <el-button style="background-color: #42b983;border: 0;color: white">点击上传</el-button>
-            </el-upload>
-          </el-form-item>
         </el-form>
         <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="save" style="background-color: darkseagreen;border: 0;">
+        <el-button type="primary" @click="save" style="background-color: darkseagreen;border: 0;color: white">
           确定
         </el-button>
       </span>
@@ -122,6 +78,8 @@
 </template>
 
 <script>
+import {postRequest, putRequest} from "@/utils/request";
+
 export default {
   name: "MessageManagement",
   data(){
@@ -133,11 +91,104 @@ export default {
       total: 0,
       tableData: [],
       pageSize: 10,
+      flag: 0
+    }
+  },
+  computed: {
+    tableDataWithIndex() {
+      return this.tableData.map((item, index) => ({
+        ...item,
+        index: (this.currentPage - 1) * this.pageSize + index + 1
+      }));
+    },
+  },
+  mounted() {
+    this.getSuggestions()
+  },
+  methods:{
+    formatText(text, maxLength) {
+      if (text.length > maxLength) {
+        return text.slice(0, maxLength) + '...';
+      }
+      return text;
+    },
+    handleEdit(row) {
+      this.form = JSON.parse(JSON.stringify(row))
+      this.dialogVisible = true
+    },
+    save() {
+        putRequest("http://lizp.vip:5453/dor/pm/sug", {
+          "id": this.form.id,
+          "status": this.form.status
+        }).then(res => {
+          console.log(res)
+          if (res.success) {
+            this.$message({
+              type: "success",
+              message: "更新成功"
+            })
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg
+            })
+          }
+          this.getSuggestions()//更新完刷新表格
+          this.dialogVisible = false//关
+        })
+    },
+    getSuggestions(){
+      postRequest('http://lizp.vip:5453/dor/pm/sug',{
+        "currentPage": this.currentPage,
+        "pageSize": this.pageSize,
+        "status": null
+      }).then(res => {
+        if (res.success) {
+          this.tableData = res.data.data
+          this.total=res.data.total
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+      })
+    },
+    handleCurrentChange(pageNum) {//改变页码
+      this.currentPage = pageNum
+      this.getWorkList()
+    },
+    handleSizeChange(pageSize) {//改变每页数
+      this.pageSize = pageSize
+      this.getWorkList()
+    },
+    searchByStatus(){
+      postRequest('http://lizp.vip:5453/dor/pm/sug',{
+        "currentPage": this.currentPage,
+        "pageSize": this.pageSize,
+        "status": -1
+      }).then(res => {
+        if (res.success) {
+          this.tableData = res.data.data
+          this.total=res.data.total
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-
+.title{
+  margin-bottom: 10px;
+  margin-left: 10px;
+  color: #42b983;
+  font-size: 25px;
+  font-weight: 800;
+}
 </style>

@@ -5,22 +5,25 @@
       <!--    功能区-->
       <div style="margin: 10px 0;width: 50%;text-align:left;display: block">
         <el-button type="primary" @click="add" style="background-color: #42b983;border: 0">新增</el-button>
-<!--        <el-button type="primary" style="background-color: #42b983;border: 0">导入</el-button>-->
-<!--        <el-button type="primary" style="background-color: #42b983;border: 0">导出</el-button>-->
       </div>
       <!--    搜索区-->
-      <div style="margin: 10px 0;width: 50%;text-align:center;display: block">
-        <el-input v-model="search" style="width: 20%" placeholder="按地址查询"/>
-        <el-button type="default" style="margin-left: 5px" @click="get">查询</el-button>
-      </div>
+      <div style="display: flex;flex-direction: row;">
+      <span>
+        <el-input v-model="title" style="width: 100%" placeholder="输入公告标题"/>
+        </span><span>
+        <el-input v-model="publisher" style="width: 70%" placeholder="输入发布人"/>
+        <el-button type="default" style="margin-left: 5px;background-color: darkseagreen;border: 0;color: #FFFFFF" @click="search">查询</el-button>
+      </span>
+        </div>
     </div>
 
-    <el-table :data="tableData" border stripe style="width: 1290px;margin: 0">
-      <el-table-column prop="id" label="ID" width="215" sortable/>
-      <el-table-column prop="title" label="标题" width="215"/>
-      <el-table-column prop="content" label="正文" width="215"/>
-      <el-table-column prop="proposalMan" label="发布人" width="215"/>
-      <el-table-column prop="time" label="时间" width="215"/>
+    <el-table :data="tableDataWithIndex" border stripe style="width: 1290px;margin: 0" :header-cell-style="{'text-align':'center'}"
+              :cell-style="{'text-align':'center'}">
+      <el-table-column prop="index" label="序号" width="115" sortable/>
+      <el-table-column prop="title" label="标题" width="245" show-overflow-tooltip/>
+      <el-table-column prop="content" label="正文" width="285" show-overflow-tooltip/>
+      <el-table-column prop="publisher" label="发布人" width="215"/>
+      <el-table-column prop="publishTime" label="时间" width="215"/>
       <el-table-column fixed="right"
                        label="操作"
                        width="215">
@@ -40,7 +43,7 @@
       <el-pagination
           v-model:current-page="currentPage4"
           v-model:page-size="pageSize"
-          :page-sizes="[5,10,20]"
+          :page-sizes="[5,10]"
           :small="small"
           :disabled="disabled"
           :background="background"
@@ -59,51 +62,23 @@
           <el-form-item style="flex-direction: row">
             <el-tag
                 style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              用户名：
+              标题：
             </el-tag>
-            <el-input v-model="form.username" style="width: 80%;display: block"/>
+            <el-input v-model="form.title" style="width: 80%;display: block"/>
           </el-form-item>
           <el-form-item style="flex-direction: row">
             <el-tag
                 style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              昵称：
+              发布人：
             </el-tag>
-            <el-input v-model="form.nickname" style="width: 80%;display: block"/>
+            <el-input v-model="form.publisher" style="width: 80%;display: block"/>
           </el-form-item>
           <el-form-item style="flex-direction: row">
             <el-tag
                 style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              年龄：
+              内容：
             </el-tag>
-            <el-input v-model="form.age" style="width: 80%;display: block"/>
-          </el-form-item>
-          <el-form-item style="flex-direction: row">
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              性别：
-            </el-tag>
-
-            <el-radio label="男" size="large" v-model="form.sex" fill="darkseagreen">男</el-radio>
-            <el-radio label="女" size="large" v-model="form.sex" fill="darkseagreen">女</el-radio>
-            <el-radio label="保密" size="large" v-model="form.sex" fill="darkseagreen">保密</el-radio>
-          </el-form-item>
-          <el-form-item style="flex-direction: row">
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              地址：
-            </el-tag>
-            <el-input v-model="form.address" type="textarea" style="width: 80%;display: block"/>
-          </el-form-item>
-          <el-form-item>
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              头像：
-            </el-tag>
-            <el-upload
-                action="" :on-success="fileUploadSuccess"
-            >
-              <el-button style="background-color: #42b983;border: 0;color: white">点击上传</el-button>
-            </el-upload>
+            <el-input v-model="form.content" type="textarea" style="width: 80%;display: block"/>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -120,23 +95,160 @@
 </template>
 
 <script>
+import {deleteRequest, postRequest, putRequest} from "@/utils/request";
+
 export default {
   name: "AnnouncementManagement",
   data(){
     return{
       form: {},
       dialogVisible: false,
-      search: '',
+      publisher: '',
+      title: '',
       currentPage: 1,
       total: 0,
       tableData: [],
       pageSize: 10,
     }
   },
-  methods: {
-    add() {
-
+  mounted() {
+    this.getAnnouce()
+  },
+  computed: {
+    tableDataWithIndex() {
+      return this.tableData.map((item, index) => ({
+        ...item,
+        index: (this.currentPage - 1) * this.pageSize + index + 1
+      }));
     }
+  },
+  methods:{
+    getAnnouce(){
+      postRequest('http://lizp.vip:5453/dor/pm/notice', {
+        "currentPage": this.currentPage,
+        "pageSize": this.pageSize,
+        "publisher": "",
+        "title": ""
+      }).then(res => {
+        if (res.success) {
+          this.tableData=res.data.data
+          this.total=res.data.total
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+      })
+    },
+    search(){
+      if (this.title=='' && this.publisher ==''){
+        this.$message({
+          type: "error",
+          message: "查询条件不满足，请输入查找条件"
+        })
+      }
+      else {
+        postRequest('http://lizp.vip:5453/dor/pm/notice', {
+          "currentPage": this.currentPage,
+          "pageSize": this.pageSize,
+          "publisher": this.publisher,
+          "title": this.title
+        }).then(res => {
+          if (res.success) {
+            this.tableData = res.data.data
+            this.total = res.data.total
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg
+            })
+          }
+        })
+      }
+    },
+    handleEdit(row) {
+      this.form = JSON.parse(JSON.stringify(row))
+      this.dialogVisible = true
+    },
+    handleCurrentChange(pageNum) {//改变页码
+      this.currentPage = pageNum
+      this.getAnnouce()
+    },
+    handleSizeChange(pageSize) {//改变每页数
+      this.pageSize = pageSize
+      this.getAnnouce()
+    },
+    handleDelete(id) {
+      console.log(id)
+      deleteRequest("http://lizp.vip:5453/dor/pm/notice/" + id).then(res => {
+        if (res.success) {
+          this.$message({
+            type: "success",
+            message: "删除成功"
+          })
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+        this.getAnnouce()//删完重载
+      })
+    },
+    add() {
+      this.dialogVisible = true;
+      this.form = {}
+    },
+    save() {
+      //更新
+      if (this.form.id) {
+        putRequest("http://lizp.vip:5453/dor/pm/notice", {
+          "publishTime": '',
+          "id": this.form.id,
+          "content": this.form.content,
+          "publisher": this.form.publisher,
+          "title": this.form.title
+        }).then(res => {
+          console.log(res)
+          if (res.success) {
+            this.$message({
+              type: "success",
+              message: "更新成功"
+            })
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg
+            })
+          }
+          this.getAnnouce()//更新完刷新表格
+          this.dialogVisible = false//关
+        })
+      }//新增
+      else {
+        postRequest("http://lizp.vip:5453/dor/pm/notice/add", {
+          "content": this.form.content,
+          "publisher": this.form.publisher,
+          "title": this.form.title
+        }).then(res => {
+          console.log(res)
+          if (res.success) {
+            this.$message({
+              type: "success",
+              message: "新增成功"
+            })
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg
+            })
+          }
+          this.getAnnouce()//更新完刷新表格
+          this.dialogVisible = false//关
+        })
+      }
+    },
   }
 }
 </script>

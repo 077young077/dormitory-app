@@ -14,8 +14,6 @@
             <el-icon><Files /></el-icon>
             <router-link active-class="active" :to="{path: '/Announcement'}"><div style="line-height: 20px;font-size: 18px;width: 120px">系统公告</div></router-link>
           </nav>
-
-
         </div>
         <div class="box">
           <div class="condition" style="width: 150px">
@@ -30,21 +28,6 @@
           <nav>
             <router-link active-class="active" to="/login" @click="clearStorage()"><div style="line-height: 20px;font-size: 18px;width: 120px;margin-left: 0"><el-icon><SwitchButton /></el-icon>退出登录</div></router-link>
           </nav>
-<!--          <div class="condition" style="width: 150px">-->
-<!--            <el-dropdown trigger="click">-->
-<!--        <span class="el-dropdown-link" style="color: #a6a6a6;font:16px Arial, Helvetica, sans-serif;font-weight: 600">-->
-<!--          系统通知-->
-<!--          <el-icon class="el-icon&#45;&#45;right">-->
-<!--        <arrow-down />-->
-<!--      </el-icon>-->
-<!--        </span>-->
-<!--              <template #dropdown>-->
-<!--                <el-dropdown-menu>-->
-<!--                  <el-dropdown-item :icon="InfoFilled" v-for="item in 20" :key="item">Action 1</el-dropdown-item>-->
-<!--                </el-dropdown-menu>-->
-<!--              </template>-->
-<!--            </el-dropdown>-->
-<!--          </div>-->
         </div>
       </div>
   

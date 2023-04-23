@@ -1,146 +1,245 @@
 <template>
   <div style="padding: 10px">
-  <!--    表格展示-->
-  <div>
-    <div style="display: flex;flex-direction: row;">
-      <!--    功能区-->
-      <div style="margin: 10px 0;width: 20%;text-align:left;display: block">
-        <el-button type="primary" @click="add" style="background-color: #42b983;border: 0">新增</el-button>
+    <!--    表格展示-->
+    <div>
+      <div style="display: flex;flex-direction: row;">
+        <!--    功能区-->
+        <span style="margin: 10px 0;width: 20%;text-align:left;display: block">
+<!--          <el-button type="primary" @click="add" style="background-color: #42b983;border: 0">新增</el-button>-->
+          <el-button type="primary" @click="exportExcel" style="background-color: #42b983;border: 0">导出Excel</el-button>
+        </span>
+        <!--    搜索区-->
+        <span style="margin: 10px 0;width: 40%;">
+          <el-input v-model="idSearch" style="width: 70%" placeholder="按用户学号查询"/>
+          <el-button type="default" style="margin-left: 5px" @click="getById">查询</el-button>
+        </span>
+        <span style="margin: 10px 0;width: 50%;text-align:center;display: block;">
+          <el-select
+              v-model="this.buildingId"
+              placeholder="选择查询寝室的楼栋"
+              style="width: 240px"
+              @change="getBuildingRooms(this.buildingId)"
+              clearable
+          >
+            <el-option
+                v-for="item in buildingData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+            />
+          </el-select>
+          <el-select
+              v-model="this.roomId"
+              placeholder="查询楼栋下的寝室"
+              style="width: 240px"
+              clearable
+          >
+            <el-option
+                v-for="item in roomData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+            />
+          </el-select>
+          <el-button @click="select">查询</el-button>
+        </span>
       </div>
-      <!--    搜索区-->
-      <div style="margin: 10px 0;width: 40%;display: block;margin-left: 500px">
-        <el-input v-model="nameSearch" style="width: 70%" placeholder="按用户姓名查询"/>
-        <el-button type="default" style="margin-left: 5px" @click="getByName">查询</el-button>
-      </div>
-      <div style="margin: 10px 0;width: 40%;text-align:center;display: block">
-        <el-input v-model="addressSearch" style="width: 70%" placeholder="按寝室查询"/>
-        <el-button type="default" style="margin-left: 5px" @click="getByAddress">查询</el-button>
+
+      <el-table :data="tableData" border stripe style="width: 1290px;margin: 0" :header-cell-style="{'text-align':'center'}"
+                :cell-style="{'text-align':'center'}" ref="table">
+        <el-table-column prop="id" label="ID" width="140" sortable/>
+        <el-table-column prop="name" label="学生姓名" width="175"/>
+        <el-table-column prop="sex" label="性别" width="175">
+          <template v-slot="{ row }">
+          {{ row.sex === 0 ? '男' : row.sex === 0 ? '女' : '' }}
+        </template>
+        </el-table-column>
+        <el-table-column prop="major" label="专业" width="175"/>
+        <el-table-column prop="building" label="地址" width="175"/>
+        <el-table-column prop="room" label="寝室号" width="175"/>
+        <el-table-column prop="score" label="得分" width="125"/>
+        <!--        <el-table-column prop="school" label="学校" width="150"/>-->
+        <el-table-column fixed="right"
+                         label="操作"
+                         width="150">
+          <template #default="scope">
+            <el-popconfirm title="确定删除？" @confirm="handleDelete(scope.row.id)"
+                           style="background-color: darkseagreen;border: 0;">
+              <template #reference>
+                <el-button type="danger" style="background-color: darkseagreen;border: 0;">删除</el-button>
+              </template>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="margin:10px 0">
+        <el-pagination
+            v-model:current-page="currentPage"
+            v-model:page-size="pageSize"
+            :page-sizes="[5,10]"
+            :small="small"
+            :disabled="disabled"
+            :background="background"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+        />
       </div>
     </div>
 
-    <el-table :data="tableData" border stripe style="width: 1290px;margin: 0">
-      <el-table-column prop="studentId" label="ID" width="90" sortable/>
-      <el-table-column prop="name" label="学生姓名" width="150"/>
-      <el-table-column prop="picture" label="人脸信息" width="150"/>
-      <el-table-column prop="position" label="职位" width="150"/>
-      <el-table-column prop="sex" label="性别" width="150"/>
-      <el-table-column prop="address" label="地址" width="150"/>
-      <el-table-column prop="school" label="学校" width="150"/>
-      <el-table-column prop="major" label="专业" width="150"/>
-      <el-table-column fixed="right"
-                       label="操作"
-                       width="150">
-        <template #default="scope">
-          <el-button @click="handleEdit(scope.row)" >编辑</el-button>
-          <el-popconfirm title="确定删除？" @confirm="handleDelete(scope.row.id)"
-                         style="background-color: darkseagreen;border: 0;">
-            <template #reference>
-              <el-button type="danger" style="background-color: darkseagreen;border: 0;">删除</el-button>
-              <el-alert title="您没有管理员权限" type="success" />
-            </template>
-          </el-popconfirm>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div style="margin:10px 0">
-      <el-pagination
-          v-model:current-page="currentPage4"
-          v-model:page-size="pageSize"
-          :page-sizes="[5,10,20]"
-          :small="small"
-          :disabled="disabled"
-          :background="background"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-      />
-      <el-dialog
-          v-model="dialogVisible"
-          title="编辑信息"
-          width="30%"
-
-      >
-        <el-form :model="form" label-width="12px">
-          <el-form-item style="flex-direction: row">
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              用户名：
-            </el-tag>
-            <el-input v-model="form.username" style="width: 80%;display: block"/>
-          </el-form-item>
-          <el-form-item style="flex-direction: row">
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              昵称：
-            </el-tag>
-            <el-input v-model="form.nickname" style="width: 80%;display: block"/>
-          </el-form-item>
-          <el-form-item style="flex-direction: row">
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              年龄：
-            </el-tag>
-            <el-input v-model="form.age" style="width: 80%;display: block"/>
-          </el-form-item>
-          <el-form-item style="flex-direction: row">
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              性别：
-            </el-tag>
-
-            <el-radio label="男" size="large" v-model="form.sex" fill="darkseagreen">男</el-radio>
-            <el-radio label="女" size="large" v-model="form.sex" fill="darkseagreen">女</el-radio>
-            <el-radio label="保密" size="large" v-model="form.sex" fill="darkseagreen">保密</el-radio>
-          </el-form-item>
-          <el-form-item style="flex-direction: row">
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              地址：
-            </el-tag>
-            <el-input v-model="form.address" type="textarea" style="width: 80%;display: block"/>
-          </el-form-item>
-          <el-form-item>
-            <el-tag
-                style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
-              头像：
-            </el-tag>
-            <el-upload
-                action="" :on-success="fileUploadSuccess"
-            >
-              <el-button style="background-color: #42b983;border: 0;color: white">点击上传</el-button>
-            </el-upload>
-          </el-form-item>
-        </el-form>
-        <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="save" style="background-color: darkseagreen;border: 0;">
-          确定
-        </el-button>
-      </span>
-        </template>
-      </el-dialog>
-    </div>
   </div>
-
-</div>
 </template>
 
 <script>
+import {deleteRequest, getRequest, postRequest} from "@/utils/request";
+import * as XLSX from 'xlsx'
+
 export default {
   name: "UserManagement",
-  data(){
-    return{
+  data() {
+    return {
       form: {},
       dialogVisible: false,
-      nameSearch: '',
-      addressSearch:'',
+      idSearch: '',
+      addressSearch: '',
       currentPage: 1,
       total: 0,
       tableData: [],
       pageSize: 10,
+      buildingData:[],
+      roomData:[],
+      buildingId:'',
+      roomId:'',
     }
+  },
+  mounted() {
+    this.getUserAuth()
+    this.getUsers()
+    this.getBuildings()
+  },
+  methods: {
+    getUserAuth(){
+      if(localStorage.getItem("Authorization") === null){
+        this.$router.push("/ManagerLogin")
+      }
+    },
+    getById(){
+      postRequest('http://lizp.vip:5453/dor/pm/user', {
+        "buildingId": "",
+        "currentPage": this.currentPage,
+        "majorId": 0,
+        "pageSize": this.pageSize,
+        "roomId": "",
+        "username": this.idSearch
+      }).then(res => {
+        if (res.code == 200) {
+          this.tableData = res.data.data
+          this.total = res.data.total
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+      })
+    },
+    exportExcel() {
+      const sheet = XLSX.utils.table_to_sheet(this.$refs.table.$el);
+      const book = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(book, sheet, 'Sheet1');
+      XLSX.writeFile(book, 'table-data.xlsx');
+    },
+    getUsers() {
+      postRequest('http://lizp.vip:5453/dor/pm/user', {
+        "buildingId": "",
+        "currentPage": this.currentPage,
+        "majorId": 0,
+        "pageSize": this.pageSize,
+        "roomId": "",
+        "username": ""
+      }).then(res => {
+        if (res.code == 200) {
+          this.tableData = res.data.data
+          this.total = res.data.total
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+      })
+    },
+    getBuildings(){
+      getRequest('http://lizp.vip:5453/dor/pm/info/build').then(res => {
+        if (res.success) {
+          this.buildingData =res.data
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+      })
+    },
+    getBuildingRooms(id){
+      console.log(id)
+      getRequest('http://lizp.vip:5453/dor/pm/info/room/'+id).then(res => {
+        if (res.success) {
+          this.roomData = res.data
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+      })
+    },
+    select(){
+      postRequest('http://lizp.vip:5453/dor/pm/user', {
+        "buildingId": this.buildingId,
+        "currentPage": this.currentPage,
+        "majorId": 0,
+        "pageSize": this.pageSize,
+        "roomId": this.roomId,
+        "username": ""
+      }).then(res => {
+        if (res.code == 200) {
+          this.tableData = res.data.data
+          this.total = res.data.total
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+      })
+    },
+    handleCurrentChange(pageNum) {//改变页码
+      this.currentPage = pageNum
+      this.getAnnouce()
+    },
+    handleSizeChange(pageSize) {//改变每页数
+      this.pageSize = pageSize
+      this.getAnnouce()
+    },
+    handleDelete(id) {
+      console.log(id)
+      deleteRequest("http://lizp.vip:5453/dor/pm/user/" + id).then(res => {
+        if (res.success) {
+          this.$message({
+            type: "success",
+            message: "删除成功"
+          })
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+        this.getUsers()//删完重载
+      })
+    },
   }
 }
 </script>

@@ -1,11 +1,11 @@
 <template>
   <div style="height: 50px;line-height: 50px;border-bottom: 1px solid #ccc;display: flex">
-    <div style="width: 200px; padding-left: 30px;font-weight: bold;color: #42b983">后台管理</div>
+    <div style="width: 400px; padding-left: 30px;font-weight: bold;color: #42b983;font-size: 30px">智慧楼栋后台管理</div>
     <div style="flex: 1;"></div>
     <div style="width: 150px;padding-top:10px">
       <el-dropdown>
     <span class="el-dropdown-link" style="font-size: 18px; color:#42b983;font-weight:700;border: 0">
-      {{Thisuser.nickname}}
+      {{Thisuser.username}}
       <el-icon class="el-icon--right">
         <arrow-down />
       </el-icon>
@@ -36,7 +36,7 @@ export default {
   },
   props: ['user'],
   created() {
-    let str =sessionStorage.getItem("user") || "{}"
+    let str =sessionStorage.getItem("User") || "{}"
     this.Thisuser=JSON.parse(str)
     console.log(this.user)
   }
