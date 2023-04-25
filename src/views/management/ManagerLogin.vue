@@ -8,7 +8,7 @@
       <el-form :model="form" ref="form" size="large" :rules="rules">
         <el-form-item prop="username" style="margin-top: 20px">
           <el-input v-model="form.username">
-            <template #prepend>用户名</template>
+            <template #prepend>管理员账号</template>
           </el-input>
         </el-form-item>
         <el-form-item prop="password" style="margin-top: 20px">
@@ -28,7 +28,7 @@
     <div style="display: block;margin-bottom: 150px;margin-top: 150px;margin-left: 100px;">
       <el-card :body-style="{ padding: '0px' }">
         <img
-            :src="this.picture"
+            src="../../assets/img/banner.jpeg"
             class="image" style="width: 300px"
         />
         <div style="padding: 14px">
@@ -48,8 +48,7 @@
 <script>
 
 import { mapMutations } from 'vuex';
-
-import {postRequest} from "@/utils/request";
+import {API2} from "@/utils/request";
 
 import {UserFilled} from '@element-plus/icons-vue'
 export default {
@@ -101,26 +100,33 @@ export default {
       this.$router.push("/Login")
     },
     login() {
-      let _this = this;
-      console.log(this.form)
-      this.$router.push('/UserManagement')
-      postRequest('http://lizp.vip:5453/dor/pm/login', this.form).then(res => {
-        if (res.success) {
-          this.$message({
-            type: "success",
-            message: "登陆成功"
-          })
-          _this.userToken = res.data;
-          sessionStorage.setItem("User", JSON.stringify(this.form))
-          _this.changeLogin({ Authorization: _this.userToken });
-          _this.$router.push('/UserManagement');
-        } else {
-          this.$message({
-            type: "error",
-            message: res.msg
-          })
-        }
-      })
+      if (this.form.username && this.form.password) {
+        let _this = this;
+        console.log(this.form)
+        this.$router.push('/UserManagement')
+        API2.postRequest('/dor/pm/login', this.form).then(res => {
+          if (res.success) {
+            this.$message({
+              type: "success",
+              message: "登陆成功"
+            })
+            _this.userToken = res.data;
+            sessionStorage.setItem("User", JSON.stringify(this.form))
+            _this.changeLogin({Authorization: _this.userToken});
+            _this.$router.push('/UserManagement');
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg
+            })
+          }
+        })
+      } else {
+        this.$message({
+          type: "error",
+          message: '不能有空值'
+        })
+      }
     }
   }
 }

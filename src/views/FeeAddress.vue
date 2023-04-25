@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import {getRequest} from "@/utils/request";
+import {API1} from "@/utils/request";
 import HomeHeader from "@/components/HomeHeader";
 export default {
   name: "FeeAddress",
@@ -122,7 +122,7 @@ export default {
   },
   methods:{
     getInfo(){
-      getRequest(
+      API1.getRequest(
           '/dor/user/info').then(res => {
         if (res.success) {
           this.userInformation = res.data
@@ -135,7 +135,7 @@ export default {
       })
     },
     getWaterCost() {
-      getRequest('/dor/info/water').then(res => {
+      API1.getRequest('/dor/info/water').then(res => {
         if (res.success) {
           this.waterCost = res.data
         } else {
@@ -147,7 +147,7 @@ export default {
       })
     },
     getPowerCost() {
-      getRequest('/dor/info/power').then(res => {
+      API1.getRequest('/dor/info/power').then(res => {
         if (res.success) {
           this.powerCost = res.data
         } else {

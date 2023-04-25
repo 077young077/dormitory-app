@@ -71,7 +71,7 @@
 
 <script>
 import HomeHeader from "@/components/HomeHeader";
-import {getRequest, postRequest} from "@/utils/request";
+import {API1} from "@/utils/request";
 import {mapMutations} from "vuex";
 
 export default {
@@ -101,14 +101,14 @@ export default {
   methods: {
     ...mapMutations(['changeLogin']),
     getMajor(){
-      getRequest('/dor/user/major').then(res=>{
+      API1.getRequest('/dor/user/major').then(res=>{
         this.majors=res.data
       })
     },
     register() {
       console.log(this.form)
       if((this.form.password === this.form.confirmPassword)&&(this.form.face != '')){
-        postRequest('/dor/user/registry', {
+        API1.postRequest('/dor/user/registry', {
           "face": this.form.face,
           "id": this.form.id,
           "majorId":this.form.majorId,
@@ -140,7 +140,7 @@ export default {
       }
     },
     getInfo() {
-      getRequest(
+      API1.getRequest(
           '/dor/user/info').then(res => {
         if (res.success) {
           this.userInformation = res.data

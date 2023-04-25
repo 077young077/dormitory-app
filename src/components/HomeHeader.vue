@@ -47,7 +47,7 @@
     ArrowDown,
     SwitchButton
   } from '@element-plus/icons-vue'
-  import {getRequest} from "@/utils/request";
+  import {API1} from "@/utils/request";
   export default {
     name: "Header",
     components :{
@@ -74,7 +74,7 @@
     },
     methods:{
       getOtherInfo(){
-        getRequest(
+        API1.getRequest(
             '/dor/user/info').then(res => {
           if (res.success) {
             this.userInformation = res.data

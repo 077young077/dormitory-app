@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import {postRequest, putRequest} from "@/utils/request";
+import {API2} from '@/utils/request'
 
 export default {
   name: "MessageManagement",
@@ -117,7 +117,7 @@ export default {
       this.dialogVisible = true
     },
     save() {
-        putRequest("http://lizp.vip:5453/dor/pm/sug", {
+      API2.putRequest("/dor/pm/sug", {
           "id": this.form.id,
           "status": this.form.status
         }).then(res => {
@@ -138,7 +138,7 @@ export default {
         })
     },
     getSuggestions(){
-      postRequest('http://lizp.vip:5453/dor/pm/sug',{
+      API2.postRequest('/dor/pm/sug',{
         "currentPage": this.currentPage,
         "pageSize": this.pageSize,
         "status": null
@@ -163,7 +163,7 @@ export default {
       this.getWorkList()
     },
     searchByStatus(){
-      postRequest('http://lizp.vip:5453/dor/pm/sug',{
+      API2.postRequest('/dor/pm/sug',{
         "currentPage": this.currentPage,
         "pageSize": this.pageSize,
         "status": -1

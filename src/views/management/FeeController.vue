@@ -52,9 +52,7 @@
 </template>
 
 <script>
-import XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
-import {postRequest} from "@/utils/request";
+import {API2} from '@/utils/request'
 
 export default {
   name: "FeeController",
@@ -96,7 +94,7 @@ export default {
   },
   methods: {
     getFee(){
-      postRequest('http://lizp.vip:5453/dor/pm/info',{
+      API2.postRequest('/dor/pm/info',{
         "buildingId": 0,
         "currentPage": this.currentPage,
         "pageSize": this.pageSize,
@@ -142,7 +140,7 @@ export default {
       // 在这里调用需要触发的函数，将选中的值作为参数传递
       console.log(val);
       if(val[0] == 0){
-        postRequest('http://lizp.vip:5453/dor/pm/info',{
+        API2.postRequest('http://lizp.vip:5453/dor/pm/info',{
           "buildingId": 0,
           "currentPage": this.currentPage,
           "pageSize": this.pageSize,
@@ -162,7 +160,7 @@ export default {
           }
         })
       }else if(val[0] == 1){
-        postRequest('http://lizp.vip:5453/dor/pm/info',{
+        API2.postRequest('http://lizp.vip:5453/dor/pm/info',{
           "buildingId": 0,
           "currentPage": this.currentPage,
           "pageSize": this.pageSize,
@@ -181,7 +179,7 @@ export default {
           }
         })
       }else if(val.valueOf() == 0){
-        postRequest('http://lizp.vip:5453/dor/pm/info',{
+        API2.postRequest('http://lizp.vip:5453/dor/pm/info',{
           "buildingId": 0,
           "currentPage": this.currentPage,
           "pageSize": this.pageSize,
@@ -200,7 +198,7 @@ export default {
           }
         })
       }else{
-        postRequest('http://lizp.vip:5453/dor/pm/info',{
+        API2.postRequest('http://lizp.vip:5453/dor/pm/info',{
           "buildingId": 0,
           "currentPage": this.currentPage,
           "pageSize": this.pageSize,

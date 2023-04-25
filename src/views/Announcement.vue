@@ -32,7 +32,7 @@
 
 <script>
 import HomeHeader from "@/components/HomeHeader";
-import {getRequest, postRequest} from "@/utils/request";
+import {API1} from "@/utils/request";
 
 export default {
   name: 'Announcement',
@@ -62,7 +62,7 @@ export default {
       this.getAnnouce()
     },
     getAnnouce(){
-      postRequest('/dor/announce', {
+      API1.postRequest('/dor/announce', {
         "page": this.currentPage,
         "pageSize": this.pageSize
       }).then(res => {

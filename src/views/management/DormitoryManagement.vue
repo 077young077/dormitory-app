@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import {getRequest, postRequest} from "@/utils/request";
+import {API2} from '@/utils/request'
 
 
 export default {
@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     getBuildings(){
-      getRequest('http://lizp.vip:5453/dor/pm/info/build').then(res => {
+      API2.getRequest('/dor/pm/info/build').then(res => {
         if (res.success) {
           this.buildingData =res.data
         } else {
@@ -131,7 +131,7 @@ export default {
     },
     getBuildingRooms(id){
       console.log(id)
-      getRequest('http://lizp.vip:5453/dor/pm/info/room/'+id).then(res => {
+      API2.getRequest('/dor/pm/info/room/'+id).then(res => {
         if (res.success) {
           this.roomData = res.data
         } else {
@@ -143,7 +143,7 @@ export default {
       })
     },
     getRooms() {
-      postRequest('http://lizp.vip:5453/dor/pm/info', {
+      API2.postRequest('/dor/pm/info', {
         "buildingId": 0,
         "currentPage": this.currentPage,
         "pageSize": this.pageSize,
@@ -163,7 +163,7 @@ export default {
       })
     },
     select(){
-      postRequest('http://lizp.vip:5453/dor/pm/info', {
+      API2.postRequest('/dor/pm/info', {
         "buildingId": this.buildingId,
         "currentPage": this.currentPage,
         "pageSize": this.pageSize,

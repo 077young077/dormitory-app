@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import {deleteRequest, postRequest, putRequest} from "@/utils/request";
+import {API2} from '@/utils/request'
 
 export default {
   name: "AnnouncementManagement",
@@ -124,7 +124,7 @@ export default {
   },
   methods:{
     getAnnouce(){
-      postRequest('http://lizp.vip:5453/dor/pm/notice', {
+      API2.postRequest('/dor/pm/notice', {
         "currentPage": this.currentPage,
         "pageSize": this.pageSize,
         "publisher": "",
@@ -149,7 +149,7 @@ export default {
         })
       }
       else {
-        postRequest('http://lizp.vip:5453/dor/pm/notice', {
+        API2.postRequest('/dor/pm/notice', {
           "currentPage": this.currentPage,
           "pageSize": this.pageSize,
           "publisher": this.publisher,
@@ -181,7 +181,7 @@ export default {
     },
     handleDelete(id) {
       console.log(id)
-      deleteRequest("http://lizp.vip:5453/dor/pm/notice/" + id).then(res => {
+      API2.deleteRequest("/dor/pm/notice/" + id).then(res => {
         if (res.success) {
           this.$message({
             type: "success",
@@ -203,7 +203,7 @@ export default {
     save() {
       //更新
       if (this.form.id) {
-        putRequest("http://lizp.vip:5453/dor/pm/notice", {
+        API2.putRequest("/dor/pm/notice", {
           "publishTime": '',
           "id": this.form.id,
           "content": this.form.content,
@@ -227,7 +227,7 @@ export default {
         })
       }//新增
       else {
-        postRequest("http://lizp.vip:5453/dor/pm/notice/add", {
+        API2.postRequest("/dor/pm/notice/add", {
           "content": this.form.content,
           "publisher": this.form.publisher,
           "title": this.form.title

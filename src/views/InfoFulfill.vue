@@ -76,8 +76,8 @@
 </template>
 
 <script>
-import HomeHeader from "@/components/HomeHeader";
-import {getRequest, postRequest} from "@/utils/request";
+import {API1} from "@/utils/request";
+const { getRequest, postRequest, putRequest, deleteRequest } = createInstance('http://lizp.vip:8183')
 
 export default {
   name: "InfoFulfill",
@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     getBuilding(){
-      getRequest('/dor/info/build').then(res=>{
+      API1.getRequest('/dor/info/build').then(res=>{
         if (res.success) {
           this.buildings = res.data
           console.log(this.buildings)
@@ -113,7 +113,7 @@ export default {
     post() {
       console.log(this.form)
       if (this.form.building != ''&&this.form.room !=''&&this.form.sex!=null){
-        postRequest('/dor/user', {
+        API1.postRequest('/dor/user', {
           "buildingId":this.form.building,
           "roomId":this.form.room,
           "sex":this.form.sex
@@ -144,7 +144,7 @@ export default {
       this.flag = true
     },
     getInfo() {
-      getRequest('/dor/user/info').then(res => {
+      API1.getRequest('/dor/user/info').then(res => {
         if (res.success) {
           this.userInformation = res.data
         } else {

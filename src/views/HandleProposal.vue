@@ -79,7 +79,7 @@
 
 <script>
 import HomeHeader from "@/components/HomeHeader";
-import {getRequest, postRequest} from "@/utils/request";
+import {API1} from "@/utils/request";
 
 export default {
   name: "HandleProposal",
@@ -107,14 +107,14 @@ export default {
   },
   methods: {
     getType(){
-      getRequest('/dor/work/type').then(res=>{
+      API1.getRequest('/dor/work/type').then(res=>{
         this.types=res.data
       })
     },
     post() {
       console.log(this.form)
       if(this.form.content&&this.form.face&&this.form.title&&this.form.type){
-        postRequest('/dor/work', {
+        API1.postRequest('/dor/work', {
           "content": this.form.content,
           "face": this.form.face,
           "title": this.form.title,
@@ -141,7 +141,7 @@ export default {
       }
     },
     getInfo() {
-      getRequest(
+      API1.getRequest(
           '/dor/user/info').then(res => {
         if (res.success) {
           this.userInformation = res.data
@@ -229,6 +229,7 @@ export default {
       var image = this.thisCancas.toDataURL("image/png");
       _this.imgSrc = image; //赋值并预览图片
       this.form.face = image;
+      this.stopNavigator()
     },
     // 关闭摄像头
     stopNavigator() {

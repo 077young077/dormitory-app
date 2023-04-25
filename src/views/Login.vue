@@ -10,7 +10,7 @@
       <el-form :model="form" ref="form" size="large" :rules="rules">
         <el-form-item prop="username" style="margin-top: 20px">
           <el-input v-model="form.username">
-            <template #prepend>用户名</template>
+            <template #prepend>学号</template>
           </el-input>
         </el-form-item>
         <el-form-item prop="password" style="margin-top: 20px">
@@ -60,7 +60,7 @@
 
 import { mapMutations } from 'vuex';
 
-import {postRequest} from "@/utils/request";
+import {API1} from "@/utils/request";
 
 import {Avatar} from '@element-plus/icons-vue'
 export default {
@@ -117,26 +117,32 @@ export default {
       this.$router.push("/home")
     },
     login() {
-      let _this = this;
-      console.log(this.form)
-      postRequest('/dor/user/login', this.form).then(res => {
-        if (res.success) {
-          this.$message({
-            type: "success",
-            message: "登陆成功"
-          })
-          _this.userToken = res.data;
-          sessionStorage.setItem("User", JSON.stringify(this.form))
-          // 将用户token保存到vuex中
-          _this.changeLogin({ Authorization: _this.userToken });
-          _this.$router.push('/home');
-        } else {
-          this.$message({
-            type: "error",
-            message: res.msg
-          })
-        }
-      })
+      if (this.form.username && this.form.password) {
+        API1.postRequest('/dor/user/login', this.form).then(res => {
+          if (res.success) {
+            this.$message({
+              type: "success",
+              message: "登陆成功"
+            })
+            this.userToken = res.data;
+            console.log(this.userToken)
+            sessionStorage.setItem("User", JSON.stringify(this.form))
+            // 将用户token保存到vuex中
+            this.changeLogin({Authorization: this.userToken});
+            this.$router.push('/home');
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg
+            })
+          }
+        })
+      } else {
+        this.$message({
+          type: "error",
+          message: '不能有空值'
+        })
+      }
     },
     register(){
       this.$router.push("/Register")

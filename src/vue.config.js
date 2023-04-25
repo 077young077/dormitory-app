@@ -1,21 +1,52 @@
 // 跨域配置
+// const cors = require('cors');
+//
+// module.exports = {
+//     devServer: {
+//         before: function (app) {
+//             app.use(cors()); // 开启CORS跨域请求
+//
+//             // 配置前台用户界面的代理地址
+//             app.use(cors(), proxy({
+//                 target: 'https://lizp.vip:8183',
+//                 changeOrigin: true,
+//                 pathRewrite: {
+//                     '^/dor': ''
+//                 }
+//             }));
+//
+//             // 配置后台管理界面的代理地址
+//             app.use('/dor/pm',cors(), proxy({
+//                 target: 'https://lizp.vip:5453',
+//                 changeOrigin: true,
+//                 pathRewrite: {
+//                     '^/dor/pm': ''
+//                 }
+//             }));
+//         }
+//     }
+// };
 module.exports = {
-    devServer: {                //记住，别写错了devServer//设置本地默认端口  选填
-        port: 9876,
-        proxy: {                 //设置代理，必须填
-            '/api': {              //设置拦截器  拦截器格式   斜杠+拦截器名字，名字可以自己定
-                target: 'http://lizp.vip:5453',     //代理的目标地址
-                changeOrigin: true,              //是否设置同源，输入是的
-                pathRewrite: {                   //路径重写
-                    '^/api': ''                     //选择忽略拦截器里面的内容
+    devServer: {
+        proxy: {
+            '/api1': { // 对应第一个实例
+                target: 'https://lizp.vip:8183',
+                pathRewrite: {
+                    '^/api1': ''
                 }
             },
-            '/api': {              //设置拦截器  拦截器格式   斜杠+拦截器名字，名字可以自己定
-                target: 'http://lizp.vip:8183',     //代理的目标地址
-                changeOrigin: true,              //是否设置同源，输入是的
-                pathRewrite: {                   //路径重写
-                    '^/api': ''                     //选择忽略拦截器里面的内容
+            '/api2': { // 对应第二个实例
+                target: 'http://lizp.vip:5453',
+                pathRewrite: {
+                    '^/api2': ''
                 }
+            }
+        }
+    },
+    configureWebpack: {
+        resolve: {
+            fallback: {
+                fs: false
             }
         }
     }

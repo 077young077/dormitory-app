@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import {postRequest} from "@/utils/request";
+import {API1} from "@/utils/request";
 import {ref, onMounted, reactive, getCurrentInstance} from "vue";
 import {useMutations} from '@/store/store'
 
@@ -61,7 +61,7 @@ onMounted(() => {
 });
 
 function login() {
-  postRequest('/dor/user/face',{
+  API1.postRequest('/dor/user/face',{
     "face":info.picture}).then(res => {
     if (res.success) {
       proxy.$message({
@@ -121,6 +121,7 @@ function drawMedia() {
   imgSrc.value = image;
   info.picture =imgSrc.value
   console.log(info.picture)
+  closeMedia()
 }
 
 </script>

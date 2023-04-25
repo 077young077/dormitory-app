@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import {postRequest, putRequest} from "@/utils/request";
+import {API2} from '@/utils/request'
 import * as XLSX from "xlsx";
 
 export default {
@@ -137,7 +137,7 @@ export default {
       XLSX.writeFile(book, 'table-data.xlsx');
     },
     select(){
-      postRequest('http://lizp.vip:5453/dor/pm/work',
+      API2.postRequest('/dor/pm/work',
           {
             "currentPage": this.currentPage,
             "pageSize": this.pageSize,
@@ -156,7 +156,7 @@ export default {
       })
     },
     getWorkList(){
-      postRequest('http://lizp.vip:5453/dor/pm/work',
+      API2.postRequest('/dor/pm/work',
       {
         "currentPage": this.currentPage,
           "pageSize": this.pageSize,
@@ -187,7 +187,7 @@ export default {
       this.dialogVisible = true
     },
     save() {
-      putRequest("http://lizp.vip:5453/dor/pm/work", {
+      API2.putRequest("/dor/pm/work", {
         "id": this.form.id,
         "status": this.form.status
       }).then(res => {

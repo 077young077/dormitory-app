@@ -187,7 +187,8 @@
 import HomeHeader from '../components/HomeHeader'
 import * as echarts from 'echarts';
 import {More, LocationInformation, Coin, InfoFilled} from '@element-plus/icons-vue'
-import {deleteRequest, getRequest, postRequest} from "@/utils/request";
+import {API1} from "@/utils/request";
+
 
 export default {
   name: 'HomeView',
@@ -234,7 +235,7 @@ export default {
       this.$router.push('/Announcement')
     },
     getOtherInfo() {
-      getRequest(
+      API1.getRequest(
           '/dor/user/info').then(res => {
         if (res.success) {
           this.userInformation = res.data
@@ -247,7 +248,7 @@ export default {
       })
     },
     deleteProposal(id) {
-        deleteRequest('/dor/work/' + id).then(res => {
+        API1.deleteRequest('/dor/work/' + id).then(res => {
           if (res.success) {
             this.$message({
               type: "success",
@@ -263,7 +264,7 @@ export default {
         })
     },
     getWaterCost() {
-      getRequest('/dor/info/water').then(res => {
+      API1.getRequest('/dor/info/water').then(res => {
         if (res.success) {
           this.waterCost = res.data
         } else {
@@ -275,7 +276,7 @@ export default {
       })
     },
     getPowerCost() {
-      getRequest('/dor/info/power').then(res => {
+      API1.getRequest('/dor/info/power').then(res => {
         if (res.success) {
           this.powerCost = res.data
         } else {
@@ -293,7 +294,7 @@ export default {
       this.$router.push('/FeeAddress')
     },
     getAnnouce() {
-      postRequest('/dor/announce', {
+      API1.postRequest('/dor/announce', {
         "page": 1,
         "pageSize": 99
       }).then(res => {
@@ -308,7 +309,7 @@ export default {
       })
     },
     getPostApplication() {
-      postRequest('/dor/work/info', {
+      API1.postRequest('/dor/work/info', {
         "page": 1,
         "pageSize": 99
       }).then(res => {
@@ -324,7 +325,7 @@ export default {
     },
     handleProposal() {
       if(this.textarea != ''){
-        postRequest('/dor/sug', {
+        API1.postRequest('/dor/sug', {
           "content": this.textarea,
         }).then(res => {
           if (res.success) {

@@ -34,7 +34,7 @@
 
 <script>
 import HomeHeader from "@/components/HomeHeader";
-import {getRequest} from "@/utils/request";
+import {API1} from "@/utils/request";
 
 export default {
   name: "Details",
@@ -58,7 +58,7 @@ export default {
       console.log(this.Id)
     },
     getData(){
-      getRequest('/dor/announce/'+this.Id).then(res => {
+      API1.getRequest('/dor/announce/'+this.Id).then(res => {
         this.Data = res.data
       })
     },

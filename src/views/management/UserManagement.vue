@@ -92,7 +92,8 @@
 </template>
 
 <script>
-import {deleteRequest, getRequest, postRequest} from "@/utils/request";
+import {API2} from '@/utils/request'
+
 import * as XLSX from 'xlsx'
 
 export default {
@@ -125,7 +126,7 @@ export default {
       }
     },
     getById(){
-      postRequest('http://lizp.vip:5453/dor/pm/user', {
+      API2.postRequest('/dor/pm/user', {
         "buildingId": "",
         "currentPage": this.currentPage,
         "majorId": 0,
@@ -136,11 +137,6 @@ export default {
         if (res.code == 200) {
           this.tableData = res.data.data
           this.total = res.data.total
-        } else {
-          this.$message({
-            type: "error",
-            message: res.msg
-          })
         }
       })
     },
@@ -151,7 +147,7 @@ export default {
       XLSX.writeFile(book, 'table-data.xlsx');
     },
     getUsers() {
-      postRequest('http://lizp.vip:5453/dor/pm/user', {
+      API2.postRequest('/dor/pm/user', {
         "buildingId": "",
         "currentPage": this.currentPage,
         "majorId": 0,
@@ -162,29 +158,19 @@ export default {
         if (res.code == 200) {
           this.tableData = res.data.data
           this.total = res.data.total
-        } else {
-          this.$message({
-            type: "error",
-            message: res.msg
-          })
         }
       })
     },
     getBuildings(){
-      getRequest('http://lizp.vip:5453/dor/pm/info/build').then(res => {
+      API2.getRequest('/dor/pm/info/build').then(res => {
         if (res.success) {
           this.buildingData =res.data
-        } else {
-          this.$message({
-            type: "error",
-            message: res.msg
-          })
         }
       })
     },
     getBuildingRooms(id){
       console.log(id)
-      getRequest('http://lizp.vip:5453/dor/pm/info/room/'+id).then(res => {
+      API2.getRequest('/dor/pm/info/room/'+id).then(res => {
         if (res.success) {
           this.roomData = res.data
         } else {
@@ -196,7 +182,7 @@ export default {
       })
     },
     select(){
-      postRequest('http://lizp.vip:5453/dor/pm/user', {
+      API2.postRequest('/dor/pm/user', {
         "buildingId": this.buildingId,
         "currentPage": this.currentPage,
         "majorId": 0,
@@ -225,7 +211,7 @@ export default {
     },
     handleDelete(id) {
       console.log(id)
-      deleteRequest("http://lizp.vip:5453/dor/pm/user/" + id).then(res => {
+      API2.deleteRequest("/dor/pm/user/" + id).then(res => {
         if (res.success) {
           this.$message({
             type: "success",
