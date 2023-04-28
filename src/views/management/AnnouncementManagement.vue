@@ -78,7 +78,7 @@
                 style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
               内容：
             </el-tag>
-            <el-input v-model="form.content" type="textarea" style="width: 80%;display: block"/>
+            <el-input v-model="form.content" type="textarea" show-word-limit autosize style="width: 80%;display: block"/>
           </el-form-item>
         </el-form>
         <template #footer>

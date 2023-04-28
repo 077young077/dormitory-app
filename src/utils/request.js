@@ -1,7 +1,7 @@
 // request.js
 import axios from 'axios'
 const baseURL1 = 'https://lizp.vip:8183';
-const baseURL2 = 'http://lizp.vip:5453';
+const baseURL2 = 'https://lizp.vip:5453';
 const instance1 = axios.create({
     baseURL: baseURL1,
     timeout: 10000, // 请求超时时间

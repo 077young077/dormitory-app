@@ -26,9 +26,9 @@
 
       <el-table :data="tableData" border stripe style="width: 1290px;margin: 0" :header-cell-style="{'text-align':'center'}"
                 :cell-style="{'text-align':'center'}" ref="table">
-        <el-table-column prop="id" label="ID" width="100" sortable show-overflow-tooltip/>
+        <el-table-column prop="id" label="ID" width="80" sortable show-overflow-tooltip/>
         <el-table-column prop="title" label="标题" width="170" show-overflow-tooltip/>
-        <el-table-column prop="content" label="内容" width="170" show-overflow-tooltip/>
+        <el-table-column prop="content" label="内容" width="190" show-overflow-tooltip/>
         <el-table-column prop="user" label="申请学生" width="170" />
         <el-table-column prop="type" label="报修类型" width="170"/>
         <el-table-column prop="status" label="现在状态" width="170">
@@ -114,6 +114,12 @@ export default {
     this.getWorkList()
   },
   computed: {
+    tableDataWithIndex() {
+      return this.table.map((item, index) => ({
+        ...item,
+        index: (this.currentPage - 1) * this.pageSize + index + 1
+      }));
+    },
     // 根据status值和id值生成操作列内容
     getStatusText() {
       return function(status, row) {

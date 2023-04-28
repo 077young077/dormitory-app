@@ -12,7 +12,7 @@
             </div>
           </div>
           <el-scrollbar height="80%">
-            <p v-for="(item,index) in this.annouce " :key="item" class="scrollbar-demo-item">{{
+            <p v-for="(item,index) in this.annouce " :key="item" class="scrollbar-demo-item" style="height: 22px">{{
                 item.title
               }}——{{ item.content }}</p>
           </el-scrollbar>
@@ -161,6 +161,8 @@
               :rows="5"
               type="textarea"
               placeholder="请输入您的建议或投诉"
+              maxlength="30"
+              show-word-limit
           />
           <el-button :dark="isDark"
                      style="height: 20%;margin-top: 10px;width: 50%;background-color: #43cf7c;border: 0;color: white;margin: 10px 25% auto 25%"

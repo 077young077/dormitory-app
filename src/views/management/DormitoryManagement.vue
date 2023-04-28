@@ -47,26 +47,59 @@
           <el-button @click="select">查询</el-button>
         </span>
       </div>
-      <el-table :data="tableData" border stripe style="width: 1290px;margin: 0" :header-cell-style="{'text-align':'center'}"
+      <el-table :data="tableDataWithIndex" border stripe style="width: 1290px;margin: 0" :header-cell-style="{'text-align':'center'}"
                 :cell-style="{'text-align':'center'}">
-        <el-table-column prop="id" label="寝室ID" width="258" sortable/>
-        <el-table-column prop="building" label="楼栋" width="258"/>
+        <el-table-column prop="index" label="序号" width="80" sortable show-overflow-tooltip/>
+        <el-table-column prop="building" label="楼栋" width="436"/>
         <el-table-column prop="room" label="房间" width="258"/>
         <el-table-column prop="member" label="人员数量" width="258"/>
         <el-table-column fixed="right"
                          label="操作"
                          width="258">
-          <template #default="scope">
-            <el-button @click="handleEdit(scope.row)" >编辑</el-button>
-            <el-popconfirm title="确定删除？" @confirm="handleDelete(scope.row.id)"
-                           style="background-color: darkseagreen;border: 0;">
-              <template #reference>
-                <el-button type="danger" style="background-color: darkseagreen;border: 0;">删除</el-button>
-              </template>
-            </el-popconfirm>
+          <template #default="{ row }">
+            <el-button @click="handleLook(row.id)" style="background-color: darkseagreen;border: 0;color: #FFFFFF">查看寝室状态</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <el-drawer v-model="drawerVisible" title="寝室信息">
+        <el-descriptions
+            direction="vertical"
+            :column="2"
+            :size="size"
+            border
+        >
+<!--          <el-descriptions-item label="寝室号id">{{ this.dorData.id}}</el-descriptions-item>-->
+          <el-descriptions-item label="寝室地址" :span="2">{{this.dorData.building}}  {{dorData.room}}</el-descriptions-item>
+          <el-descriptions-item label="寝室成员数">{{ this.dorData.member}}</el-descriptions-item>
+          <el-descriptions-item label="寝室本周得分">{{this.dorData.score}}</el-descriptions-item>
+          <el-descriptions-item label="水费">
+            <el-tag size="small" type="warning" v-if="this.dorData.waterRate < 0">已欠费</el-tag>
+            <el-tag size="small" type="success" v-else>未欠费</el-tag>
+          </el-descriptions-item>
+          <el-descriptions-item label="电费">
+            <el-tag size="small" type="warning" v-if="this.dorData.powerRate < 0">已欠费</el-tag>
+            <el-tag size="small" type="success" v-else>未欠费</el-tag>
+          </el-descriptions-item>
+          <el-descriptions-item label="成员">
+            <div  v-for="(item,index) in this.members " :key="item" style="display: flex;">
+              <span>
+                <img src="../../assets/img/man.png" alt="" width="80" height="80">
+              </span>
+              <span>
+                <div>
+                学号：{{item.id}}
+              </div>
+              <div>
+                姓名：{{item.name}}
+              </div>
+              <div>
+                专业：{{item.major}}
+              </div>
+              </span>
+            </div>
+          </el-descriptions-item>
+        </el-descriptions>
+    </el-drawer>
       <div style="margin:10px 0">
         <el-pagination
             v-model:current-page="currentPage"
@@ -94,6 +127,7 @@ export default {
   mounted() {
     this.getRooms()
     this.getBuildings()
+    console.log(this.drawerVisible)
   },
   data(){
     return{
@@ -111,10 +145,18 @@ export default {
       selectRoom:'',
       buildingId: '',
       roomId:'',
+      drawerVisible: false,
+      dorData:[],
+      members:[],
     }
   },
-  computed(){
-
+  computed: {
+    tableDataWithIndex() {
+      return this.tableData.map((item, index) => ({
+        ...item,
+        index: (this.currentPage - 1) * this.pageSize + index + 1
+      }));
+    }
   },
   methods: {
     getBuildings(){
@@ -189,6 +231,21 @@ export default {
     handleSizeChange(pageSize) {//改变每页数
       this.pageSize = pageSize
       this.getRooms()
+    },
+    handleLook(id) {
+      this.drawerVisible = true
+      console.log(this.drawerVisible)
+      API2.getRequest('/dor/pm/info/'+id).then(res => {
+        if (res.success) {
+          this.dorData = res.data
+          this.members = res.data.users
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+      })
     },
   }
 }

@@ -14,7 +14,7 @@
           <el-dropdown-menu>
 <!--            <el-dropdown-item >个人信息</el-dropdown-item>-->
 <!--            <el-dropdown-item @click="$router.push('/about')">关于网站</el-dropdown-item>-->
-            <el-dropdown-item @click="$router.push('/login')">退出系统</el-dropdown-item>
+            <el-dropdown-item @click="$router.push('/')">退出系统</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>

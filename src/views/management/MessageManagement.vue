@@ -16,20 +16,26 @@
               :cell-style="{'text-align':'center'}">
       <el-table-column prop="index" label="序号" width="80" sortable/>
       <el-table-column prop="student" label="建议学生" width="150" />
-      <el-table-column prop="content" label="建议内容" width="350"/>
+      <el-table-column prop="content" label="建议内容" width="540" show-overflow-tooltip/>
       <el-table-column prop="commitTime" label="建议时间" width="190"/>
-      <el-table-column prop="checkTime" label="处理时间" width="190"/>
-<el-table-column prop="status" label="状态" width="140" >
+<el-table-column prop="status" label="状态" width="100" >
   <template v-slot="{ row }">
     {{ row.status === 1 ? '已读' : row.status === -1 ? '未读' : '' }}
   </template>
     </el-table-column>
       <el-table-column fixed="right"
                        label="操作"
-                       width="190">
+                       width="230">
         <template #default="scope">
           <el-button @click="handleEdit(scope.row)" style="background-color: darkseagreen;border: 0;color: #FFFFFF">编辑意见状态</el-button>
+          <el-popconfirm title="确定删除？" style="background-color: white;border: 0;color: black">
+          <template #reference>
+            <el-button type="danger" style="background-color: darkseagreen;border: 0;" @click="handleDelete">删除</el-button>
+            <el-alert title="您没有管理员权限" type="success"/>
+          </template>
+        </el-popconfirm>
         </template>
+
       </el-table-column>
     </el-table>
     <div style="margin:10px 0">
@@ -106,11 +112,26 @@ export default {
     this.getSuggestions()
   },
   methods:{
-    formatText(text, maxLength) {
-      if (text.length > maxLength) {
-        return text.slice(0, maxLength) + '...';
-      }
-      return text;
+    handleDelete() {
+      this.$message({
+        type: "error",
+        message: "暂未开放删除功能"
+      })
+      // console.log(id)
+      // API2.deleteRequest("" + id).then(res => {
+      //   if (res.success) {
+      //     this.$message({
+      //       type: "success",
+      //       message: "删除成功"
+      //     })
+      //   } else {
+      //     this.$message({
+      //       type: "error",
+      //       message: res.msg
+      //     })
+      //   }
+      //   this.getSuggestions()//删完重载
+      // })
     },
     handleEdit(row) {
       this.form = JSON.parse(JSON.stringify(row))

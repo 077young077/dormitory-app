@@ -19,8 +19,8 @@
       </div>
       <el-divider>
       </el-divider>
-      <div class="container">
-        {{ this.Data.content }}
+      <div class="container" style="white-space: pre-wrap;text-align: left">
+        {{this.Data.content}}
       </div>
       <el-divider content-position="right" border-style="color: #a6a6a6;
 "></el-divider>
@@ -48,9 +48,13 @@ export default {
       text:'',
     }
   },
+  computed: {
+
+  },
   mounted() {
     this.getId()
     this.getData()
+
   },
   methods:{
     getId(){
@@ -81,8 +85,8 @@ export default {
 .title {
   margin-top: 10px;
   font-size: 40px;
+  line-height: 45px;
   font-weight: 800;
-  text-align: center;
   color: #a6a6a6;
 }
 
@@ -138,7 +142,8 @@ li{
   text-shadow: #999999;
   color: #000000;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  margin: 0 auto;
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(rgba(72, 217, 130, 0.2)));
 }
 </style>

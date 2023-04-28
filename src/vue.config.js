@@ -36,7 +36,7 @@ module.exports = {
                 }
             },
             '/api2': { // 对应第二个实例
-                target: 'http://lizp.vip:5453',
+                target: 'https://lizp.vip:5453',
                 pathRewrite: {
                     '^/api2': ''
                 }

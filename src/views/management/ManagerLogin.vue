@@ -97,7 +97,7 @@ export default {
   methods: {
     ...mapMutations(['changeLogin']),
     gotoUserLogin(){
-      this.$router.push("/Login")
+      this.$router.push("/")
     },
     login() {
       if (this.form.username && this.form.password) {

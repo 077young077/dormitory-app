@@ -63,7 +63,8 @@
                 style="text-align: center;display: block;margin-right: 10px; background-color: darkseagreen;border: 0;color: white;padding-top: 5px">
               申请详情
             </el-tag>
-            <el-input type="textarea" v-model="form.content">
+            <el-input type="textarea" v-model="form.content" maxlength="50"
+                      show-word-limit>
             </el-input>
           </el-form-item>
         </el-form>

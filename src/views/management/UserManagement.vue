@@ -57,13 +57,13 @@
         <el-table-column prop="major" label="专业" width="175"/>
         <el-table-column prop="building" label="地址" width="175"/>
         <el-table-column prop="room" label="寝室号" width="175"/>
-        <el-table-column prop="score" label="得分" width="125"/>
+        <el-table-column prop="score" label="寝室卫生得分" width="125"/>
         <!--        <el-table-column prop="school" label="学校" width="150"/>-->
         <el-table-column fixed="right"
                          label="操作"
                          width="150">
           <template #default="scope">
-            <el-popconfirm title="确定删除？" @confirm="handleDelete(scope.row.id)"
+            <el-popconfirm title="确定删除？" @confirm="showMessageBox(scope.row.id)"
                            style="background-color: darkseagreen;border: 0;">
               <template #reference>
                 <el-button type="danger" style="background-color: darkseagreen;border: 0;">删除</el-button>
@@ -95,6 +95,7 @@
 import {API2} from '@/utils/request'
 
 import * as XLSX from 'xlsx'
+import {ElMessageBox} from "element-plus";
 
 export default {
   name: "UserManagement",
@@ -209,24 +210,34 @@ export default {
       this.pageSize = pageSize
       this.getAnnouce()
     },
-    handleDelete(id) {
-      console.log(id)
-      API2.deleteRequest("/dor/pm/user/" + id).then(res => {
-        if (res.success) {
-          this.$message({
-            type: "success",
-            message: "删除成功"
-          })
-        } else {
-          this.$message({
-            type: "error",
-            message: res.msg
-          })
-        }
-        this.getUsers()//删完重载
-      })
-    },
-  }
+    showMessageBox(id) {
+      ElMessageBox.confirm('再考虑考虑（删除该用户会删除其在数据库中所有信息）？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        API2.deleteRequest("/dor/pm/user/" + id).then(res => {
+          if (res.success) {
+            this.$message({
+              type: "success",
+              message: "删除成功"
+            })
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg
+            })
+          }
+          this.getUsers()//删完重载
+        })
+        // 用户点击确定按钮时执行的操作
+        console.log('删除')
+      }).catch(() => {
+        // 用户点击取消按钮时执行的操作
+        console.log('取消')
+      });
+    }
+  },
 }
 </script>
 

@@ -77,7 +77,7 @@
 
 <script>
 import {API1} from "@/utils/request";
-const { getRequest, postRequest, putRequest, deleteRequest } = createInstance('http://lizp.vip:8183')
+import HomeHeader from "@/components/HomeHeader";
 
 export default {
   name: "InfoFulfill",

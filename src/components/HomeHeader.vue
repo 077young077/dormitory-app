@@ -23,10 +23,10 @@
             <el-icon><UserFilled /></el-icon>已登录
           </div>
           <nav v-else>
-            <router-link active-class="active" to="/login" ><div style="line-height: 20px;font-size: 18px;width: 60px;margin-left: 20px"><el-icon><UserFilled /></el-icon>登录</div></router-link>
+            <router-link active-class="active" to="/" ><div style="line-height: 20px;font-size: 18px;width: 60px;margin-left: 20px"><el-icon><UserFilled /></el-icon>登录</div></router-link>
           </nav>
           <nav>
-            <router-link active-class="active" to="/login" @click="clearStorage()"><div style="line-height: 20px;font-size: 18px;width: 120px;margin-left: 0"><el-icon><SwitchButton /></el-icon>退出登录</div></router-link>
+            <router-link active-class="active" to="/" @click="clearStorage()"><div style="line-height: 20px;font-size: 18px;width: 120px;margin-left: 0"><el-icon><SwitchButton /></el-icon>退出登录</div></router-link>
           </nav>
         </div>
       </div>

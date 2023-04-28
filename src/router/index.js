@@ -3,15 +3,14 @@ import Layout from "@/layout/Layout";
 
 const routes = [
   {
-    path: '/',
+    path:'/admin',
     name: 'Layout',
     component: Layout,
-    redirect:"/UserManagement",
     children:[
       {
-        path:'UserManagement',
-        name:'UserManagement',
-        component: () => import("../views/management/UserManagement"),
+        path:'/UserManagement',
+        name:'/UserManagement',
+        component: () => import("@/views/management/UserManagement"),
         meta: { isAuth: true },
       },
       {
@@ -59,10 +58,10 @@ const routes = [
     meta: { isAuth: true },
   },
   {
-    path: '/Login',
+    path: '/',
     name: '/Login',
     component: () => import('@/views/Login'),
-    meta: { isAuth: true },
+    meta: { isAuth: false },
   },
   {
     path: '/HandleProposal',
@@ -84,7 +83,7 @@ const routes = [
   },
   {
     path: '/InfoFulfill',
-    name: '/InfoFulfill',
+    name: 'InfoFulfill',
     component: () => import('@/views/InfoFulfill'),
     meta: { isAuth: false, title:'完善信息' },
   },
@@ -121,7 +120,7 @@ router.beforeEach((to, from, next) => {
   } else if (to.name === 'Login' || to.name === 'ManagerLogin' || to.name === 'InfoFulfill'){
     // 如果没有 token，跳转到登录页面，并将目标路由作为参数传递
     next({
-      path: '/login',
+      path: '/',
       query: {redirect: to.fullPath},
     });
   }else{
