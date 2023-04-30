@@ -148,6 +148,9 @@ export default {
       XLSX.utils.book_append_sheet(book, sheet, 'Sheet1');
       XLSX.writeFile(book, 'table-data.xlsx');
     },
+
+
+
     getUsers() {
       API2.postRequest('/dor/pm/user', {
         "buildingId": "",
@@ -205,11 +208,11 @@ export default {
     },
     handleCurrentChange(pageNum) {//改变页码
       this.currentPage = pageNum
-      this.getAnnouce()
+      this.getUsers()
     },
     handleSizeChange(pageSize) {//改变每页数
       this.pageSize = pageSize
-      this.getAnnouce()
+      this.getUsers()
     },
     showMessageBox(id) {
       ElMessageBox.confirm('再考虑考虑（删除该用户会删除其在数据库中所有信息）？', '提示', {

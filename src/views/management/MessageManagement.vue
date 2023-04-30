@@ -184,11 +184,11 @@ export default {
     },
     handleCurrentChange(pageNum) {//改变页码
       this.currentPage = pageNum
-      this.getWorkList()
+      this.getSuggestions()
     },
     handleSizeChange(pageSize) {//改变每页数
       this.pageSize = pageSize
-      this.getWorkList()
+      this.getSuggestions()
     },
     searchByStatus(){
       API2.postRequest('/dor/pm/sug',{
