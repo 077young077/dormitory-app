@@ -112,7 +112,7 @@ export default {
     }
   },
   mounted() {
-    this.getAnnouce()
+    this.getUserAuth()
   },
   computed: {
     tableDataWithIndex() {
@@ -123,6 +123,13 @@ export default {
     }
   },
   methods:{
+    getUserAuth(){
+      if(!localStorage.getItem('Authorization')){
+        this.$router.push("/ManagerLogin")
+      }else {
+        this.getAnnouce()
+      }
+    },
     getAnnouce(){
       API2.postRequest('/dor/pm/notice', {
         "currentPage": this.currentPage,

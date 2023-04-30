@@ -71,7 +71,7 @@ function login() {
       let userToken = res.data;
       mutations.changeLogin({ Authorization: userToken });
       sessionStorage.setItem("user", JSON.stringify(res.data))        // 缓存用户信息
-      proxy.$router.push("/Home")  //登录成功之后进行页面的跳转，跳转到主页
+      proxy.$router.push("/")  //登录成功之后进行页面的跳转，跳转到主页
     } else {
       proxy.$message({
         type: "error",

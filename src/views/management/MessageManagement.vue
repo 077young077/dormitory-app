@@ -109,9 +109,16 @@ export default {
     },
   },
   mounted() {
-    this.getSuggestions()
+    this.getUserAuth()
   },
   methods:{
+    getUserAuth(){
+      if(!localStorage.getItem('Authorization')){
+        this.$router.push("/ManagerLogin")
+      }else {
+        this.getSuggestions()
+      }
+    },
     handleDelete() {
       this.$message({
         type: "error",

@@ -52,13 +52,13 @@ const routes = [
     meta: { isAuth: false, title:'管理员登录' },
   },
   {
-    path: '/Home',
+    path: '/',
     name: '/Home',
     component: () => import('@/views/HomeView'),
     meta: { isAuth: true },
   },
   {
-    path: '/',
+    path: '/Login',
     name: '/Login',
     component: () => import('@/views/Login'),
     meta: { isAuth: false },
@@ -108,6 +108,7 @@ const routes = [
 ]
 
 const router = createRouter({
+
   history: createWebHistory(),
   routes
 })
@@ -120,7 +121,7 @@ router.beforeEach((to, from, next) => {
   } else if (to.name === 'Login' || to.name === 'ManagerLogin' || to.name === 'InfoFulfill'){
     // 如果没有 token，跳转到登录页面，并将目标路由作为参数传递
     next({
-      path: '/',
+      path: '/Login',
       query: {redirect: to.fullPath},
     });
   }else{
@@ -128,6 +129,7 @@ router.beforeEach((to, from, next) => {
     next();
   }
 })
+
 
 
 export default router

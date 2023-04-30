@@ -117,13 +117,14 @@ export default {
   },
   mounted() {
     this.getUserAuth()
-    this.getUsers()
-    this.getBuildings()
   },
   methods: {
     getUserAuth(){
-      if(localStorage.getItem("Authorization") === null){
+      if(!localStorage.getItem('Authorization')){
         this.$router.push("/ManagerLogin")
+      }else {
+        this.getUsers()
+        this.getBuildings()
       }
     },
     getById(){

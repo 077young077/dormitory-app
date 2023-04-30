@@ -31,10 +31,6 @@
       <el-icon><Message /></el-icon>
       <span>报修管理</span>
     </el-menu-item>
-    <el-menu-item index="/">
-      <el-icon><House /></el-icon>
-      <span>回到登录</span>
-    </el-menu-item>
   </el-menu>
 </div>
 </template>

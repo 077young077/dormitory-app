@@ -123,7 +123,7 @@ export default {
               type: "success",
               message: "提交信息成功",
             })
-            this.$router.push('/home')
+            this.$router.push('/')
           } else {
             this.$message({
               type: "error",

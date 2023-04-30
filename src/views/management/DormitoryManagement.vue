@@ -125,9 +125,7 @@ import {API2} from '@/utils/request'
 export default {
   name: "DormitoryManagement",
   mounted() {
-    this.getRooms()
-    this.getBuildings()
-    console.log(this.drawerVisible)
+    this.getUserAuth()
   },
   data(){
     return{
@@ -159,6 +157,14 @@ export default {
     }
   },
   methods: {
+    getUserAuth(){
+      if(!localStorage.getItem('Authorization')){
+        this.$router.push("/ManagerLogin")
+      }else {
+        this.getRooms()
+        this.getBuildings()
+      }
+    },
     getBuildings(){
       API2.getRequest('/dor/pm/info/build').then(res => {
         if (res.success) {

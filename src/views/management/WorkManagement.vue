@@ -111,7 +111,7 @@ export default {
     }
   },
   mounted() {
-    this.getWorkList()
+    this.getUserAuth()
   },
   computed: {
     tableDataWithIndex() {
@@ -136,6 +136,13 @@ export default {
     }
   },
   methods:{
+    getUserAuth(){
+      if(!localStorage.getItem('Authorization')){
+        this.$router.push("/ManagerLogin")
+      }else {
+        this.getWorkList()
+      }
+    },
     exportExcel() {
       const sheet = XLSX.utils.table_to_sheet(this.$refs.table.$el);
       const book = XLSX.utils.book_new();
